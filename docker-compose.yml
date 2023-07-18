@@ -12,6 +12,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - ZBX_STARTVMWARECOLLECTORS=1
+      - ZBX_ENABLE_SNMP_TRAPS=true
     ports:
       - 10051:10051
     networks:
@@ -20,6 +21,7 @@ services:
       - zabbix-db
     volumes:
       - ./zabbix-server-data:/var/lib/zabbix
+      - ./snmptraps:/var/lib/zabbix/snmptraps:ro
 
   zabbix-db:
     image: postgres:13
@@ -53,6 +55,7 @@ services:
     depends_on:
       - zabbix-server
       - zabbix-db
+      
   zabbix-agent:
     image: zabbix/zabbix-agent:alpine-6.4-latest
     ports:
