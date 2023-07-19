@@ -48,8 +48,11 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - PHP_TZ=Asia/Almaty
+    volumes:
+      - ./zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
     ports:
       - 8080:8080
+      - 8443:8443
     networks:
       - default
     depends_on:
