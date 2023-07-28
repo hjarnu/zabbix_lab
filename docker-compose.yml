@@ -1,13 +1,13 @@
 version: '3.9'
 
 services:
-  zabbix-server:
+  zabbix_server:
     image: zabbix/zabbix-server-pgsql:latest
-    container_name: zabbix-server
+    container_name: zabbix_server
     restart: unless-stopped
     environment:
       - TZ=Asia/Almaty
-      - DB_SERVER_HOST=zabbix-db
+      - DB_SERVER_HOST=zabbix_db
       - DB_SERVER_PORT=5432
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -20,31 +20,31 @@ services:
     networks:
       - default
     depends_on:
-      - zabbix-db
+      - zabbix_db
     volumes:
-      - ./zabbix-server-data:/var/lib/zabbix
+      - ./zabbix_server_data:/var/lib/zabbix
       - ./snmptraps:/var/lib/zabbix/snmptraps:ro
 
-  zabbix-db:
+  zabbix_db:
     image: postgres:13
-    container_name: zabbix-db
+    container_name: zabbix_db
     restart: unless-stopped
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     networks:
       - default
 
-  zabbix-web:
+  zabbix_web:
     image: zabbix/zabbix-web-nginx-pgsql:latest
-    container_name: zabbix-web
+    container_name: zabbix_web
     restart: unless-stopped
     environment:
-      - ZBX_SERVER_HOST=zabbix-server
-      - DB_SERVER_HOST=zabbix-db
+      - ZBX_SERVER_HOST=zabbix_server
+      - DB_SERVER_HOST=zabbix_db
       - DB_SERVER_PORT=5432
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -58,11 +58,12 @@ services:
     networks:
       - default
     depends_on:
-      - zabbix-server
-      - zabbix-db
+      - zabbix_server
+      - zabbix_db
       
   zabbix-agent:
     image: zabbix/zabbix-agent:alpine-6.4-latest
+    container_name: zabbix_agent
     ports:
       - "10050:10050"
     volumes:
